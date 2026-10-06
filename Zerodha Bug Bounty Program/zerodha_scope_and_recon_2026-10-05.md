@@ -2,14 +2,52 @@
 
 **Date:** 2026-10-05  
 **Status:** Partial, read-only reconnaissance  
-**Scope source:** Targets and exclusions below are transcribed from the researcher-provided scope for this session; program policy was not independently verified.
+**Scope source:** Initial recon scope was researcher-provided. A scope table supplied on 2026-10-06 is recorded below; program policy was not independently verified.
 
 ## Authorized Scope
+
+The current working record reflects the researcher-supplied scope table dated 2026-10-06. This was not independently verified against the program policy and is treated as a record of what was supplied, not as a legal or contractual statement of authorization.
 
 - Primary: `*.zerodha.com/*`
 - Other authorized targets: `https://api.kite.trade`, `*.zerodha.net/*`, `*zerodhacapital.com/*`
 - Android apps: Kite by Zerodha, Coin by Zerodha, Pulse by Zerodha
 - iOS apps: Kite by Zerodha, Coin by Zerodha
+
+### Supplied scope table (2026-10-06)
+
+- `*.zerodha.com/*` — Wildcard — `0.0.0.0/32` — High engagement
+- `https://api.kite.trade` — API — `0.0.0.0/32` — Moderate engagement
+- `https://play.google.com/store/apps/details?id=com.zerodha.kite3&hl=en_IN&gl=US` — Android: Play Store — `0.0.0.0/32` — Low engagement
+- `https://play.google.com/store/apps/details?id=com.zerodha.coin&hl=en_IN&gl=US` — Android: Play Store — `0.0.0.0/32` — High engagement
+- `https://play.google.com/store/apps/details?id=com.zerodha.pulse&hl=en_IN&gl=US` — Android: Play Store — `0.0.0.0/32` — High engagement
+- `https://apps.apple.com/in/app/kite-zerodha/id1449453802` — iOS: App Store — `0.0.0.0/32` — Low engagement
+- `https://apps.apple.com/in/app/coin-by-zerodha/id1392892554` — iOS: App Store — `0.0.0.0/32` — Moderate engagement
+- `*zerodhacapital.com/*` — Any — `0.0.0.0/32` — Low engagement
+- `*.zerodha.net/*` — Any — `0.0.0.0/32` — Moderate engagement
+
+### Engagement summary from the supplied table
+
+- High: `*.zerodha.com/*`; Coin for Android; Pulse for Android
+- Moderate: `https://api.kite.trade`; Coin for iOS; `*.zerodha.net/*`
+- Low: Kite for Android; Kite for iOS; `*zerodhacapital.com/*`
+
+The `0.0.0.0/32` string in the IP Address column was present for every row. This is recorded as supplied metadata only; it does not identify a target IP or expand authorization. The app store URLs identify the listed apps and are not themselves authorization to test the app stores or unrelated services.
+
+## Out-of-Scope Systems
+
+- `https://zerodha.com/varsity/*`
+- `https://varsitylive.zerodha.com/*`
+- Zerodha Varsity Android app
+- Zerodha Varsity iOS app
+- `https://kite.trade/forum/*`
+- `https://developers.kite.trade/*`
+- Newsletters via SubStack
+- Sensibull
+- Sentinel
+- Smallcase
+- `https://streak.zerodha.com/*` (Streaks)
+- `https://fd.zerodha.com/*` (Zerodha FD)
+- Any unlisted or uncertain host, third-party infrastructure, CDN/analytics/advertising infrastructure, and redirect destinations outside authorized scope
 
 ## Explicit Exclusions
 
@@ -18,6 +56,8 @@
 - Zerodha Varsity Android and iOS apps
 - `https://kite.trade/forum/*`
 - `https://developers.kite.trade/*`
+- `https://streak.zerodha.com/*` (Streaks)
+- `https://fd.zerodha.com/*` (Zerodha FD)
 - Sensibull, Sentinel, Smallcase, newsletters/SubStack
 - All unlisted or uncertain hosts, third-party infrastructure, CDN/analytics/advertising infrastructure, and redirect destinations outside authorized scope
 
