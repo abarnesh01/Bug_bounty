@@ -17,11 +17,11 @@
 - Full session & user data leaked in inline JavaScript on every page load:
 
 ```javascript
-window.NOW.session_id = 'ED655DABC37F8310535D1723E40131E9';
+window.NOW.session_id = '[REDACTED]';
 window.NOW.user_name = 'guest';
-window.NOW.user_id = '[REDACTED-SYS_ID_RAW-591bce70]';
-window.g_ck = '[REDACTED-HEX40PLUS-7e727c3b]';
-window.NOW.portal_id = '[REDACTED-SYS_ID_RAW-e25b306b]';
+window.NOW.user_id = '[REDACTED]';
+window.g_ck = '[REDACTED — CSRF token]';
+window.NOW.portal_id = '[REDACTED]';
 window.NOW.instance_id = '64c13c2bdb7bd5d02f68c5970...';
 ```
 
@@ -29,7 +29,7 @@ window.NOW.instance_id = '64c13c2bdb7bd5d02f68c5970...';
 - But **`/api/now/sp/page?id=csm_index`** returns full page configuration including user profile to unauthenticated visitors (HTTP 200):
   ```json
   "user": {
-    "sys_id": "[REDACTED-SYS_ID_RAW-591bce70]",
+    "sys_id": "[REDACTED]",
     "email": "guest@example.com",
     "user_name": "guest",
     "logged_in": false
@@ -49,14 +49,14 @@ window.NOW.instance_id = '64c13c2bdb7bd5d02f68c5970...';
 **Severity estimate**: P4 (informational → P3 if private IP)
 **Type**: Information Disclosure
 
-**Cookie**: `BIGipServerpool_testsupportvintedgo = 2041356f27f044656ab17e11cb77f7df`
+**Cookie**: `BIGipServerpool_testsupportvintedgo = [REDACTED]`
 
 **Decoded:**
 ```
-IP (little-endian):  32.65.53.111
+IP (little-endian):  [REDACTED — decoded IP]
 Port (little-endian): 61479
 ```
-Note: 32.65.53.111 decodes to a public IP, suggesting the BIG-IP is routing to a ServiceNow cloud instance. This is low impact for cloud-hosted SNow but confirms BIG-IP is present.
+Note: [REDACTED — decoded IP] decodes to a public IP, suggesting the BIG-IP is routing to a ServiceNow cloud instance. This is low impact for cloud-hosted SNow but confirms BIG-IP is present.
 
 ---
 

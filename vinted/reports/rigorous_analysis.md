@@ -66,8 +66,8 @@ Target: test-escalations.vintedgo.com | Prior label: P3–P4
 | Claim | Status | Source |
 |---|---|---|
 | Cookie BIGipServerpool_testsupportvintedgo is set | FACT | Captured cookie jar |
-| Cookie decoded to IP 32.65.53.111 port 61479 | FACT | Local Python decode (little-endian) |
-| 32.65.53.111 is a public (non-RFC-1918) IP | FACT | ipaddress.is_private == False confirmed |
+| Cookie decoded to IP [REDACTED — decoded IP] port 61479 | FACT | Local Python decode (little-endian) |
+| [REDACTED — decoded IP] is a public (non-RFC-1918) IP | FACT | ipaddress.is_private == False confirmed |
 | This is a Vinted-controlled internal backend server | UNSUPPORTED | IP is public/global. Consistent with ServiceNow cloud infrastructure, not Vinted's own network. |
 | This constitutes "internal IP disclosure" | UNSUPPORTED | IP is public, not private. No internal network range is exposed. |
 
@@ -179,7 +179,7 @@ Remove from all reports.
 | # | Claim | Why it is wrong |
 |---|---|---|
 | 1 | g_ck token authenticates ServiceNow API calls | All /api/now/table/* returned 401 regardless of g_ck. It is a CSRF token, not auth. |
-| 2 | BIG-IP cookie reveals internal backend IP | Decoded IP 32.65.53.111 is a public global IP. Not Vinted's internal network. |
+| 2 | BIG-IP cookie reveals internal backend IP | Decoded IP [REDACTED — decoded IP] is a public global IP. Not Vinted's internal network. |
 | 3 | carrier.vintedgo.com tracking API accessible without auth | 404 on all paths tested. No real tracking number used. Auth behaviour unknown. |
 | 4 | JWT app_id / scope can be manipulated | PS256 signed. Modification invalidates signature. No private key available. |
 | 5 | ServiceNow portal is a sensitive internal tool | It is listed in Bugcrowd scope — Vinted intentionally exposes it for testing. |

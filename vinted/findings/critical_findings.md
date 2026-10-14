@@ -72,30 +72,30 @@ app as suggested by scope listing, but a **ServiceNow** instance.
 - Page title: "Customer Service Portal - Customer Support"
 - Cookies set:
   - `glide_user_route` = glide.1bb6ae8220e4aad39cf28c5cf4d061ed (ServiceNow Glide)
-  - `JSESSIONID` = [REDACTED-JSESSIONID-5df68e6d]
-  - `BIGipServerpool_testsupportvintedgo` = 2041356f27f044656ab17e11cb77f7df (F5 BIG-IP LB!)
-  - `glide_node_id_for_js` = [REDACTED-HEX40PLUS-d29a64e3]...
+  - `JSESSIONID` = [REDACTED — session ID]
+  - `BIGipServerpool_testsupportvintedgo` = [REDACTED — BIG-IP cookie] (F5 BIG-IP LB!)
+  - `glide_node_id_for_js` = [REDACTED — node fingerprint]...
 - Server header: `snow_adc` (ServiceNow Application Delivery Controller)
 - Script version: `v=10-06-2026_0230` (October 6, 2026 build)
 
 ### Exposed JavaScript Globals (Inline Scripts — HIGH VALUE)
 ```javascript
 // Session data exposed in page source:
-window.NOW.session_id = 'ED655DABC37F8310535D1723E40131E9';
+window.NOW.session_id = '[REDACTED]';
 window.NOW.user_name = 'guest';
-window.NOW.user_id = '[REDACTED-SYS_ID_RAW-591bce70]';
+window.NOW.user_id = '[REDACTED]';
 window.NOW.user_display_name = 'Guest';
-window.g_ck = '[REDACTED-HEX40PLUS-7e727c3b]';
-window.NOW.portal_id = '[REDACTED-SYS_ID_RAW-e25b306b]';
+window.g_ck = '[REDACTED — CSRF token]';
+window.NOW.portal_id = '[REDACTED]';
 window.NOW.instance_id = '64c13c2bdb7bd5d02f68c5970...';
-window.NOW.user_id_hashed = '[REDACTED-HEX40PLUS-c4f48e16]';
+window.NOW.user_id_hashed = '[REDACTED]';
 ```
 
 **`window.g_ck`** is the **ServiceNow CSRF/session token** (`glide_ck`) — this is 
 critical! This token is required for authenticated ServiceNow API calls.
 
 ### F5 BIG-IP Load Balancer Cookie
-`BIGipServerpool_testsupportvintedgo = 2041356f27f044656ab17e11cb77f7df`
+`BIGipServerpool_[pool-name] = [REDACTED — BIG-IP cookie hex]`
 This can be decoded to reveal internal server IP/port. BIG-IP cookie format:
 `{pool_id}.{encoded_server_ip}.{encoded_port}`
 → Decode to find internal backend server IP.
@@ -103,9 +103,9 @@ This can be decoded to reveal internal server IP/port. BIG-IP cookie format:
 ### Portal Configuration Leaked
 ```json
 {
-  "sys_id": "[REDACTED-SYS_ID_RAW-e25b306b]",
+  "sys_id": "[REDACTED — portal sys_id]",
   "title": "Customer Support",
-  "sc_catalog": "[REDACTED-SYS_ID_RAW-d70b80fc]",
+  "sc_catalog": "[REDACTED — catalog sys_id]",
   "theme": "Vinted Customer Portal",
   "sp_chat_queue": "4bc7a3f3c3133100..."
 }
@@ -124,7 +124,7 @@ GET /api/now/table/sn_customerservice_account  ← customer accounts
 With `window.g_ck` as the CSRF token and `JSESSIONID` as session:
 ```bash
 curl -H "X-UserToken: 61655dabc37f8310535d1723e40131ea..." \
-     -b "JSESSIONID=[REDACTED-JSESSIONID-5df68e6d]" \
+     -b "JSESSIONID=[REDACTED — session ID]" \
      "https://test-escalations.vintedgo.com/api/now/table/sn_customerservice_case"
 ```
 
@@ -169,7 +169,7 @@ Link found: `/csm?id=sc_category&sys_id=6b0a05401be82110a069866ee54bcb50`
 **Status**: NOTED (not reportable)
 
 ```
-[REDACTED-GOOGLE_KEY-ec65da56]
+[REDACTED — Google Maps API key]
 ```
 Found in: `https://maps.googleapis.com/maps/api/js?libraries=marker,places,geometry&key=AIzaSy...`
 → Excluded per Vinted's scope rules. Note for completeness.

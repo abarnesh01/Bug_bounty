@@ -68,7 +68,7 @@ Date: 2026-10-14 | Status: AWAITING APPROVAL TO APPLY
 ### S2, S13–S17 — BIG-IP Cookie + Decoded IP (LOW)
 
 **Type**: BIG-IP persistence cookie raw hex + decoded public IP  
-**Risk**: The decoded IP (`32.65.53.111`) is a public global address — confirmed in analysis to belong to ServiceNow's cloud infrastructure, not Vinted's internal network. No sensitive network topology exposed.  
+**Risk**: The decoded IP (`[REDACTED — public IP]`) is a public global address — confirmed in analysis to belong to ServiceNow's cloud infrastructure, not Vinted's internal network. No sensitive network topology exposed.  
 **Action**: Replace for hygiene and to keep the report consistent with the rigorous_analysis.md conclusion.
 
 ---

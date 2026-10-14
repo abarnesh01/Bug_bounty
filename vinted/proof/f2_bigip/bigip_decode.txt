@@ -5,13 +5,13 @@ PROOF: F5 BIG-IP Persistence Cookie — Internal IP Disclosure
 Target: https://test-escalations.vintedgo.com
 Cookie name: BIGipServerpool_testsupportvintedgo
 
-Raw cookie value: 2041356f27f044656ab17e11cb77f7df
+Raw cookie value: [REDACTED — BIG-IP cookie hex]
 
 Decode method: Standard F5 BIG-IP persistence cookie format
-  IP bytes (hex):   2041356f -> 32.65.53.111
+  IP bytes (hex):   2041356f -> [REDACTED — decoded IP]
   Port bytes (hex): 27f0 -> 61479
 
-Decoded backend server: 32.65.53.111:61479
+Decoded backend server: [REDACTED — see rigorous_analysis.md for context]
 Is private IP: False
 Is global IP:  True
 
