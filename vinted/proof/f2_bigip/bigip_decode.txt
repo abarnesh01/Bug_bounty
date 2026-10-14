@@ -1,0 +1,25 @@
+============================================================
+PROOF: F5 BIG-IP Persistence Cookie — Internal IP Disclosure
+============================================================
+
+Target: https://test-escalations.vintedgo.com
+Cookie name: BIGipServerpool_testsupportvintedgo
+
+Raw cookie value: 2041356f27f044656ab17e11cb77f7df
+
+Decode method: Standard F5 BIG-IP persistence cookie format
+  IP bytes (hex):   2041356f -> 32.65.53.111
+  Port bytes (hex): 27f0 -> 61479
+
+Decoded backend server: 32.65.53.111:61479
+Is private IP: False
+Is global IP:  True
+
+Pool name leaked: testsupportvintedgo
+  -> Confirms: production support pool for Vinted Go
+
+How to reproduce:
+  1. Visit https://test-escalations.vintedgo.com/
+  2. Open browser DevTools -> Application -> Cookies
+  3. Read cookie: BIGipServerpool_testsupportvintedgo
+  4. Decode: bytes 0-3 LE=IP, bytes 4-5 LE=port

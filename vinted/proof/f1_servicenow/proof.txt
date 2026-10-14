@@ -1,0 +1,54 @@
+=================================================================
+FINDING F1: ServiceNow CSP Portal — Session Token Disclosure
+Target: https://test-escalations.vintedgo.com
+Severity: P3 (Information Disclosure — session context leaked to all visitors)
+=================================================================
+
+HOW TO REPRODUCE (anyone can verify):
+  curl -s "https://test-escalations.vintedgo.com/csm?id=csm_index" | grep "g_ck\|session_id\|user_id\|user_name"
+
+LIVE RESPONSE (no cookies, no auth, fresh request):
+
+  window.g_ck = '[REDACTED-HEX40PLUS-d0d5914c]'
+  window.NOW.session_id = 'BF295DEB87BBC71042EC0FAC8BBB35E5'
+  window.NOW.user_name = 'guest'
+  window.NOW.user_id = '[REDACTED-SYS_ID_RAW-591bce70]'
+  window.NOW.user_display_name = 'Guest'
+  window.NOW.instance_id = '64c13c2bdb7bd5d02f68c597059619e4'
+
+COOKIES SET WITHOUT LOGIN:
+  glide_node_id_for_js: [REDACTED-HEX40PLUS-06dd8adf]
+  JSESSIONID: (set per session)
+  glide_user_route: glide.1bb6ae8220e4aad39cf28c5cf4d061ed
+  BIGipServerpool_testsupportvintedgo: 2041356f27f044656ab17e11cb77f7df
+
+/api/now/sp/page?id=csm_index (HTTP 200, no auth):
+  {
+    "user": {
+      "sys_id": "[REDACTED-SYS_ID_RAW-591bce70]",
+      "user_name": "guest",
+      "logged_in": false,
+      "email": "guest@example.com",
+      "preferred_language_dv": "English"
+    },
+    "page": {
+      "sys_id": "[REDACTED-SYS_ID_RAW-cad351e6]",
+      "title": "Customer Service Portal",
+      "public": true,
+      "id": "csm_index"
+    }
+  }
+
+WHAT THIS MEANS:
+  - window.g_ck is ServiceNow's CSRF token (also used for API auth)
+  - It changes per session but is visible in unauthenticated page source
+  - Anyone can read it and attempt to call authenticated ServiceNow APIs
+  - glide_node_id_for_js reveals internal cluster node fingerprint
+  - The platform is ServiceNow, version 10-06-2026 build (October 2026)
+  - Case submissions URL: /csm?id=sc_category&sys_id=6b0a05401be82110a069866ee54bcb50
+  - My cases URL: /csm?id=csm_my_lists&table=sn_customerservice_case
+
+ESCALATION PATH:
+  If case IDOR is confirmed (cases accessible by ID without ownership check):
+  → Support cases contain customer names, parcel details, contact info
+  → Severity escalates to P2

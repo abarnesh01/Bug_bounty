@@ -1,0 +1,54 @@
+============================================================
+PROOF: JWT Token Internal Hostname Disclosure
+============================================================
+
+Target: https://www.vinted.com
+Cookie: access_token_web
+Source: Captured from unauthenticated browser visit to www.vinted.com
+
+JWT HEADER:
+{
+  "alg": "PS256",
+  "kid": "E57YdruHplAju2cNo1DorH3j27Bu5-s_OP5PwPihn5M",
+  "typ": "JWT"
+}
+
+JWT PAYLOAD:
+{
+  "app_id": 4,
+  "aud": "fr.core.api.vinted.com",
+  "client_id": "web",
+  "exp": 1791996676,
+  "iat": 1791910275,
+  "iss": "vinted-iam-oauth",
+  "purpose": "access",
+  "scope": "public",
+  "sid": "43aa5fe7-1791910275"
+}
+
+--- Security Observations ---
+
+[1] INTERNAL HOSTNAME LEAKED:
+    aud = 'fr.core.api.vinted.com'
+    This is an internal API hostname not publicly documented.
+    Attackers can use this to:
+    - Target SSRF payloads at fr.core.api.vinted.com
+    - Discover the internal API structure
+    - Understand the IAM architecture
+
+[2] KEY ID EXPOSED:
+    kid = 'E57YdruHplAju2cNo1DorH3j27Bu5-s_OP5PwPihn5M'
+    No public JWKS endpoint found (all 404). Keys are private-only.
+
+[3] APP_ID = 4
+    Test if other app_ids (1,2,3,5) expose different API surfaces
+    e.g., mobile API may have fewer restrictions
+
+[4] SCOPE = 'public'
+    Test if scope escalation is validated server-side after auth
+
+How to reproduce:
+  1. Visit https://www.vinted.com in any browser (no account needed)
+  2. DevTools -> Application -> Cookies -> access_token_web
+  3. Copy value, decode at jwt.io or:
+     python3 -c "import base64,json; t='{JWT}'; p=t.split('.')[1]; p+='='*(4-len(p)%4); print(json.loads(base64.urlsafe_b64decode(p)))"

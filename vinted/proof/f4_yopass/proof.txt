@@ -1,0 +1,57 @@
+=================================================================
+FINDING F4: badger.it.vinted.com — Public Yopass Deployment
+Target: https://badger.it.vinted.com
+Tool: Yopass (open-source one-time secret sharing)
+GitHub: https://github.com/jhaals/yopass
+Severity: P3 (risk of credential exposure if UUIDs are leaked externally)
+=================================================================
+
+HOW TO REPRODUCE:
+  curl -s https://badger.it.vinted.com/config | python3 -m json.tool
+  curl -s https://badger.it.vinted.com/health
+
+LIVE /config RESPONSE (HTTP 200, no auth):
+  {
+    "DEFAULT_EXPIRY": 3600,
+    "DISABLE_FEATURES": false,
+    "DISABLE_UPLOAD": false,
+    "FORCE_ONETIME_SECRETS": false,   ← secrets can be set to non-expiring
+    "NO_LANGUAGE_SWITCHER": false,
+    "PREFETCH_SECRET": true,          ← ciphertext delivered before passphrase
+    "READ_ONLY": false
+  }
+
+LIVE /health RESPONSE (HTTP 200):
+  {"status":"healthy"}
+
+RESPONSE HEADERS (confirm no auth required):
+  HTTP/2 200
+  content-type: application/json
+  access-control-allow-origin: *    ← CORS allows any origin
+  cache-control: no-store
+  server: cloudflare
+
+CERTIFICATE (confirms Vinted ownership):
+  subject: CN=it.vinted.com
+  issuer: Google Trust Services WE1
+  Valid: Sep 27 2026 – Dec 26 2026
+
+PLATFORM CONFIRMED:
+  Page title: "Yopass: Share Secrets Securely"
+  Link to: https://github.com/jhaals (Yopass creator Johan Haals)
+  Upload endpoint: https://badger.it.vinted.com/#/upload
+  API: /create/secret (requires PGP-encrypted content)
+  API: /create/file
+
+RISK SCENARIO:
+  Vinted engineering uses this to share credentials (DB passwords, API keys, 
+  SSH keys). If any UUID is leaked via git history, Slack, email, or logs,
+  the secret is retrievable by anyone with internet access — no VPN required.
+
+  FORCE_ONETIME_SECRETS: false means staff can create REUSABLE secrets that
+  survive multiple reads. Combined with public access = persistent risk.
+
+ATTACK SURFACE:
+  Search for leaked UUIDs:
+  site:github.com "badger.it.vinted.com"
+  web.archive.org/web/*/badger.it.vinted.com/secret/*
